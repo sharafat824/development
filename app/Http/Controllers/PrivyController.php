@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\PrivyService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Http;
 
 class PrivyController extends Controller
 {
@@ -14,14 +15,19 @@ class PrivyController extends Controller
         $this->privy = $privy;
     }
 
-    public function getCampaigns(): JsonResponse
+    public function getCampaigns()
     {
-        try {
-            // Adjusted endpoint based on typical Privy API structure
-            $campaigns = $this->privy->get('campaigns'); // Assuming 'campaigns' is the correct endpoint
-            return response()->json($campaigns);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to retrieve campaigns: ' . $e->getMessage()], 500);
+        // Get the API URL from the environment variable
+        $apiUrl = env('PRIVY_API_URL'); // Ensure this is set as 'https://api.privy.io'
+    
+        // Log the full URL for debugging purposes
+        \Log::info('API URL:', [$apiUrl . '/campaigns']);
+    
+        // Correctly formed endpoint for campaigns
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . env('PRIVY_CLIENT_ID')
+        ])->get($apiUrl . '/campaigns'); // Make sure there is a slash before 'campaigns'
+    
+        dd($response);
         }
-    }
 }
