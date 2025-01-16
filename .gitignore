@@ -1,5 +1,13 @@
+# Ignore specific files and directories
+
+# Laravel's public directory
+/public/index.php
+/public/.htaccess
+
+# Other common Laravel files and folders to ignore
 /.phpunit.cache
 /node_modules
+/public
 /public/build
 /public/hot
 /public/storage
